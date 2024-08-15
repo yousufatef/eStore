@@ -9,16 +9,20 @@ import {
 } from "react-bootstrap";
 import { FaShoppingCart, FaUser } from "react-icons/fa";
 import "./header.css";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const userInfo = {
     isAdmin: true,
   };
+
   return (
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
         <Container>
-          <Navbar.Brand>eStore</Navbar.Brand>
+          <Navbar.Brand as={Link} to="/">
+            eStore
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
@@ -42,12 +46,14 @@ const Header = () => {
               {userInfo ? (
                 <>
                   <NavDropdown title="joe" id="username">
-                    <NavDropdown.Item>Profile</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/profile">
+                      Profile
+                    </NavDropdown.Item>
                     <NavDropdown.Item>Logout</NavDropdown.Item>
                   </NavDropdown>
                 </>
               ) : (
-                <Nav.Link>
+                <Nav.Link as={Link} to="/login">
                   <FaUser /> Sign In
                 </Nav.Link>
               )}
@@ -55,9 +61,15 @@ const Header = () => {
               {/* Admin Links */}
               {userInfo && userInfo.isAdmin && (
                 <NavDropdown title="Admin" id="adminmenu">
-                  <NavDropdown.Item>Products</NavDropdown.Item>
-                  <NavDropdown.Item>Orders</NavDropdown.Item>
-                  <NavDropdown.Item>Users</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/products">
+                    Products
+                  </NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/orders">
+                    Orders
+                  </NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/users">
+                    Users
+                  </NavDropdown.Item>
                 </NavDropdown>
               )}
             </Nav>
