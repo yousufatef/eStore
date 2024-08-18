@@ -2,29 +2,44 @@
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Rating from "./Rating";
+import { FaCartPlus } from "react-icons/fa";
 
 const Product = ({ product }) => {
   return (
-    <Card className="my-3 p-3 rounded">
+    <Card
+
+      style={{ backgroundColor: "#F5F7F8" }}
+      className="border-0 my-3 p-3"
+    >
       <Link to={`/product/${product._id}`}>
-        <Card.Img src={product.image} variant="top" />
+        <Card.Img src={product.image} variant="top" className="rounded-3" />
       </Link>
 
-      <Card.Body>
-        <Link to={`/product/${product._id}`}>
-          <Card.Title as="div" className="product-title">
+      <Card.Body className="d-flex flex-column">
+        <Link to={`/product/${product._id}`} className="text-decoration-none">
+          <Card.Title
+            as="div"
+            className="text-dark"
+            style={{ textDecoration: "underline" }}
+          >
             <strong>{product.name}</strong>
           </Card.Title>
         </Link>
 
-        <Card.Text as="div">
+        <Card.Text as="div" className="my-2">
           <Rating
             value={product.rating}
             text={`${product.numReviews} reviews`}
           />
         </Card.Text>
 
-        <Card.Text as="h3">${product.price}</Card.Text>
+        <Card.Text className="d-flex justify-content-between align-items-center mt-auto">
+          <span className="mb-0">${product.price}</span>
+          <FaCartPlus
+            className="fs-5 text-info"
+            style={{ cursor: "pointer" }}
+          />
+        </Card.Text>
       </Card.Body>
     </Card>
   );

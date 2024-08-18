@@ -1,9 +1,11 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from "./pages/Layout";
 import HomePage from "./pages/HomePage";
-import ProductPage from "./pages/ProductPage";
+import ProductDetailsPage from "./pages/ProductDetailsPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import "./App.css";
+import { SkeletonTheme } from "react-loading-skeleton";
 
 function App() {
   const router = createBrowserRouter([
@@ -17,7 +19,7 @@ function App() {
         },
         {
           path: "/product/:id",
-          element: <ProductPage />,
+          element: <ProductDetailsPage />,
         },
         {
           path: "/login",
@@ -31,7 +33,11 @@ function App() {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <SkeletonTheme baseColor="#C1C1C1" highlightColor="#747272">
+      <RouterProvider router={router} />;
+    </SkeletonTheme>
+  );
 }
 
 export default App;
