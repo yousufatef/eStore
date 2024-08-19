@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Carousel, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import ProductCarouselSkeleton from "./ProductCarouselSkeleton";
 
 const ProductCarousel = ({ products }) => {
   return (
@@ -21,7 +22,7 @@ const ProductCarousel = ({ products }) => {
           ))}
         </Carousel>
       ) : (
-        <div>No products available</div>
+        <ProductCarouselSkeleton />
       )}
     </div>
   );

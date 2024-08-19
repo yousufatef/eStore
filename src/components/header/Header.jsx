@@ -3,12 +3,13 @@ import { FaOpencart, FaSearch, FaUser } from "react-icons/fa";
 import "./header.css";
 import { Link } from "react-router-dom";
 import { RiShoppingBag4Line } from "react-icons/ri";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const userInfo = {
     isAdmin: true,
   };
-
+  const { cartItems } = useSelector((state) => state.cart);
   return (
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
@@ -39,11 +40,19 @@ const Header = () => {
             </Form>
             <Nav className="ms-auto">
               <Nav.Link
+                as={Link}
+                to="/cart"
                 className="d-flex justify-content-center flex-column mt-lg-0 mt-2"
                 style={{ position: "relative" }}
               >
                 <FaOpencart className="fs-3" />
-                <span className="cart-value">5</span>
+                {cartItems.length > 0 ? (
+                  <span className="bg-success cart-value">
+                    {cartItems.reduce((curr, item) => curr + item.qty, 0)}
+                  </span>
+                ) : (
+                  <span className="bg-primary cart-value">0</span>
+                )}
               </Nav.Link>
 
               {userInfo ? (
