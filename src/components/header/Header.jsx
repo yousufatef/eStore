@@ -1,22 +1,60 @@
 import { Navbar, Nav, Container, NavDropdown, Form } from "react-bootstrap";
 import { FaOpencart, FaSearch, FaUser } from "react-icons/fa";
 import "./header.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RiShoppingBag4Line } from "react-icons/ri";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { logout } from "../../redux/features/authSlice.js";
+import { useLogoutMutation } from "../../redux/api/usersApiSlice.js";
+import Cookies from "js-cookie";
 
 const Header = () => {
-  const userInfo = {
-    isAdmin: true,
-  };
+  const [expanded, setExpanded] = useState(false);
+
   const { cartItems } = useSelector((state) => state.cart);
+  const { userInfo } = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [logoutApi] = useLogoutMutation();
+
+  const handleToggle = () => {
+    setExpanded(!expanded);
+  };
+
+  const handleLinkClick = () => {
+    setExpanded(false);
+  };
+
+  const logoutHandler = async () => {
+    try {
+      await logoutApi(); // Ensure logout is awaited
+      dispatch(logout());
+      Cookies.remove("accessToken");
+      navigate("/login");
+      handleLinkClick();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  useEffect(() => {}, [userInfo]);
+
   return (
     <header>
-      <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
+      <Navbar
+        bg="dark"
+        expanded={expanded}
+        onToggle={handleToggle}
+        variant="dark"
+        expand="lg"
+        collapseOnSelect
+      >
         <Container>
           <Navbar.Brand
             as={Link}
             to="/"
+            onClick={handleLinkClick}
             className="d-flex align-items-center justify-content-center"
           >
             <RiShoppingBag4Line className="fs-1 me-1" />
@@ -41,6 +79,7 @@ const Header = () => {
             <Nav className="ms-auto">
               <Nav.Link
                 as={Link}
+                onClick={handleLinkClick}
                 to="/cart"
                 className="d-flex justify-content-center flex-column mt-lg-0 mt-2"
                 style={{ position: "relative" }}
@@ -57,29 +96,49 @@ const Header = () => {
 
               {userInfo ? (
                 <>
-                  <NavDropdown title="joe" id="username">
-                    <NavDropdown.Item as={Link} to="/profile">
+                  <NavDropdown title={userInfo.name} id="username">
+                    <NavDropdown.Item
+                      as={Link}
+                      onClick={handleLinkClick}
+                      to="/profile"
+                    >
                       Profile
                     </NavDropdown.Item>
-                    <NavDropdown.Item>Logout</NavDropdown.Item>
+                    <NavDropdown.Item onClick={logoutHandler}>
+                      Logout
+                    </NavDropdown.Item>
                   </NavDropdown>
                 </>
               ) : (
-                <Nav.Link as={Link} to="/login">
-                  <FaUser /> Sign In
-                </Nav.Link>
+                <Link to="/login">
+                  <button onClick={handleLinkClick} className="login-btn">
+                    <FaUser /> Login
+                  </button>
+                </Link>
               )}
 
               {/* Admin Links */}
               {userInfo && userInfo.isAdmin && (
                 <NavDropdown title="Admin" id="adminmenu">
-                  <NavDropdown.Item as={Link} to="/products">
+                  <NavDropdown.Item
+                    as={Link}
+                    onClick={handleLinkClick}
+                    to="/products"
+                  >
                     Products
                   </NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to="/orders">
+                  <NavDropdown.Item
+                    as={Link}
+                    onClick={handleLinkClick}
+                    to="/orders"
+                  >
                     Orders
                   </NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to="/users">
+                  <NavDropdown.Item
+                    as={Link}
+                    onClick={handleLinkClick}
+                    to="/users"
+                  >
                     Users
                   </NavDropdown.Item>
                 </NavDropdown>

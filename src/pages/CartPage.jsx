@@ -27,6 +27,9 @@ const CartPage = () => {
     dispatch(removeFromCart(id));
   };
 
+  const checkoutHandler = () => {
+    navigate("/login?redirect=/shipping");
+  };
   return (
     <div>
       <Row>
@@ -110,7 +113,7 @@ const CartPage = () => {
                   className="btn-block"
                   type="button"
                   disabled={cartItems.length === 0}
-                  onClick={() => navigate("/checkout")}
+                  onClick={checkoutHandler}
                 >
                   <span>Process To Checkout</span>
                 </Button>

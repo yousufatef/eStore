@@ -14,7 +14,7 @@ import {
 import { MdAddShoppingCart } from "react-icons/md";
 import Rating from "../components/Rating";
 import Skeleton from "react-loading-skeleton";
-import { useGetProductDetailsQuery } from "../redux/features/productsApiSlice";
+import { useGetProductDetailsQuery } from "../redux/api/productsApiSlice";
 import { addToCart } from "../redux/features/cartSlice";
 import { useDispatch } from "react-redux";
 

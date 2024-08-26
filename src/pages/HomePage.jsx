@@ -2,11 +2,11 @@ import { Alert, Col, Row } from "react-bootstrap";
 import Product from "../components/Product/Product";
 import ProductCarousel from "../components/Product/ProductCarousel";
 import ProductSkeleton from "../components/Product/ProductSkeleton";
-import { useGetProductsQuery } from "../redux/features/productsApiSlice";
+import { useGetProductsQuery } from "../redux/api/productsApiSlice";
 
 const HomePage = () => {
   const { data: products, error, isError, isLoading } = useGetProductsQuery();
-  console.log(error);
+
   return (
     <>
       <ProductCarousel products={products} />
