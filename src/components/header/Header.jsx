@@ -1,5 +1,5 @@
-import { Navbar, Nav, Container, NavDropdown, Form } from "react-bootstrap";
-import { FaOpencart, FaSearch, FaUser } from "react-icons/fa";
+import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
+import { FaOpencart, FaUser } from "react-icons/fa";
 import "./header.css";
 import { Link, useNavigate } from "react-router-dom";
 import { RiShoppingBag4Line } from "react-icons/ri";
@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { logout } from "../../redux/features/authSlice.js";
 import { useLogoutMutation } from "../../redux/api/usersApiSlice.js";
 import Cookies from "js-cookie";
-
+import SearchBox from "../SearchBox";
 const Header = () => {
   const [expanded, setExpanded] = useState(false);
 
@@ -65,17 +65,7 @@ const Header = () => {
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Form className="d-flex m-auto mt-2">
-              <input
-                type="text"
-                className="search-field"
-                placeholder="Search a product..."
-              />
-
-              <button className="search-btn">
-                <FaSearch />
-              </button>
-            </Form>
+            <SearchBox handleLinkClick={handleLinkClick} />
             <Nav className="ms-auto">
               <Nav.Link
                 as={Link}
@@ -123,21 +113,21 @@ const Header = () => {
                   <NavDropdown.Item
                     as={Link}
                     onClick={handleLinkClick}
-                    to="/products"
+                    to="/admin/product-list"
                   >
                     Products
                   </NavDropdown.Item>
                   <NavDropdown.Item
                     as={Link}
                     onClick={handleLinkClick}
-                    to="/orders"
+                    to="/admin/order-list"
                   >
                     Orders
                   </NavDropdown.Item>
                   <NavDropdown.Item
                     as={Link}
                     onClick={handleLinkClick}
-                    to="/users"
+                    to="/admin/user-list"
                   >
                     Users
                   </NavDropdown.Item>

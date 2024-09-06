@@ -6,6 +6,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  InputGroup,
   Row,
 } from "react-bootstrap";
 import FormContainer from "../components/FormContainer";
@@ -15,12 +16,16 @@ import { toast } from "react-toastify";
 import { setCredentials } from "../redux/features/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
+import { FaEye } from "react-icons/fa";
+import { IoIosEyeOff } from "react-icons/io";
 
 const LoginPage = () => {
   const [inputField, setInputField] = useState({
     email: "",
     password: "",
   });
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -44,7 +49,6 @@ const LoginPage = () => {
       const { email, password } = inputField;
       const res = await login({ email, password }).unwrap();
       const accessToken = res.accessToken;
-      console.log(accessToken);
       if (accessToken) {
         Cookies.set("accessToken", accessToken);
       }
@@ -75,17 +79,25 @@ const LoginPage = () => {
         </FormGroup>
         <FormGroup className="my-2" controlId="password">
           <FormLabel>Password</FormLabel>
-          <FormControl
-            type="password"
-            placeholder="Enter Password"
-            value={inputField.password}
-            onChange={(e) =>
-              setInputField((prevState) => ({
-                ...prevState,
-                password: e.target.value,
-              }))
-            }
-          />
+          <InputGroup>
+            <FormControl
+              type={showPassword ? "text" : "password"} // Toggle password visibility
+              placeholder="Enter Password"
+              value={inputField.password}
+              onChange={(e) =>
+                setInputField((prevState) => ({
+                  ...prevState,
+                  password: e.target.value,
+                }))
+              }
+            />
+            <Button
+              variant="outline-primary"
+              onClick={() => setShowPassword((prevShow) => !prevShow)}
+            >
+              {showPassword ? <IoIosEyeOff /> : <FaEye />}
+            </Button>
+          </InputGroup>
         </FormGroup>
         <Button disabled={isLoading} type="submit" variant="primary">
           {!isLoading ? "Sign In" : "Submitting"}

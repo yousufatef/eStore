@@ -5,19 +5,25 @@ import Rating from "../Rating";
 import { MdAddShoppingCart } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../redux/features/cartSlice";
+import { toast } from "react-toastify";
 
 const Product = ({ product }) => {
   const dispatch = useDispatch();
 
   const addToCartHandler = () => {
-    // Adding the product to the cart with a default quantity of 1
     dispatch(addToCart({ ...product, qty: 1 }));
+    toast.success("Product added to cart");
   };
 
   return (
     <div style={{ backgroundColor: "#F5F7F8" }} className="border-0 my-3 p-3">
       <Link to={`/product/${product._id}`}>
-        <Card.Img src={product.image} variant="top" className="rounded-1 " />
+        <Card.Img
+          src={product.image}
+          variant="top"
+          className="rounded-1 "
+          style={{ width: "100%", height: "170px", objectFit: "cover" }}
+        />
       </Link>
 
       <Card.Body className="d-flex flex-column mt-3">

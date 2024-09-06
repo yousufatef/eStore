@@ -13,6 +13,7 @@ import { MdDelete } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "../redux/features/cartSlice";
+import { toast } from "react-toastify";
 
 const CartPage = () => {
   const dispatch = useDispatch();
@@ -25,6 +26,7 @@ const CartPage = () => {
   };
   const removeItemHandler = async (id) => {
     dispatch(removeFromCart(id));
+    toast.error("Product removed from cart");
   };
 
   const checkoutHandler = () => {
