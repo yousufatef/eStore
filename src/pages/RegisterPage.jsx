@@ -14,6 +14,7 @@ import { useRegisterMutation } from "../redux/api/usersApiSlice";
 import { setCredentials } from "../redux/features/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 const RegisterPage = () => {
   const [inputField, setInputField] = useState({
@@ -50,13 +51,19 @@ const RegisterPage = () => {
     } else {
       try {
         const res = await register({ name, email, password }).unwrap();
+        const accessToken = res.accessToken; 
+
+        if (accessToken) {
+          Cookies.set("accessToken", accessToken);
+        }
+
         dispatch(setCredentials({ ...res }));
         navigate(redirect);
       } catch (err) {
         toast.error(err?.data?.message || err.error);
       }
     }
-  };
+};
 
   return (
     <FormContainer>
