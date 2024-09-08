@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Form } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import "./header/Header.css";
+import "./header/header.css";
 import { FaSearch } from "react-icons/fa";
 
 const SearchBox = ({ handleLinkClick }) => {
