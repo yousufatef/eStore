@@ -82,7 +82,7 @@ const ProductEditPage = () => {
         Go Back
       </Link>
       <FormContainer>
-        <Meta title={product.name} />
+        <Meta title={product?.name} />
         <h1>Edit Product</h1>
         {loadingUpdate && <Loader />}
         {isLoading ? (

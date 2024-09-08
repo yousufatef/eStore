@@ -1,22 +1,24 @@
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom"; // Import useLocation
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { FaOpencart, FaUser } from "react-icons/fa";
-import "./header.css";
-import { Link, useNavigate } from "react-router-dom";
 import { RiShoppingBag4Line } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
 import { logout } from "../../redux/features/authSlice.js";
 import { useLogoutMutation } from "../../redux/api/usersApiSlice.js";
 import Cookies from "js-cookie";
 import SearchBox from "../SearchBox";
+
 const Header = () => {
   const [expanded, setExpanded] = useState(false);
+  const [dropdownTitle, setDropdownTitle] = useState("Admin");
 
   const { cartItems } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation(); // Get current route location
   const [logoutApi] = useLogoutMutation();
 
   const handleToggle = () => {
@@ -29,7 +31,7 @@ const Header = () => {
 
   const logoutHandler = async () => {
     try {
-      await logoutApi(); // Ensure logout is awaited
+      await logoutApi();
       dispatch(logout());
       Cookies.remove("accessToken");
       navigate("/login");
@@ -38,7 +40,18 @@ const Header = () => {
       console.error(err);
     }
   };
-  useEffect(() => {}, [userInfo]);
+
+  const handleItemClick = (title) => {
+    setDropdownTitle(title);
+    handleLinkClick();
+  };
+
+  // Reset dropdown title to "Admin" when navigating to home ("/")
+  useEffect(() => {
+    if (location.pathname === "/") {
+      setDropdownTitle("Admin");
+    }
+  }, [location]); // Trigger this effect when the location (route) changes
 
   return (
     <header>
@@ -109,24 +122,24 @@ const Header = () => {
 
               {/* Admin Links */}
               {userInfo && userInfo.isAdmin && (
-                <NavDropdown title="Admin" id="adminmenu">
+                <NavDropdown title={dropdownTitle} id="adminmenu">
                   <NavDropdown.Item
                     as={Link}
-                    onClick={handleLinkClick}
+                    onClick={() => handleItemClick("Products")}
                     to="/admin/product-list"
                   >
                     Products
                   </NavDropdown.Item>
                   <NavDropdown.Item
                     as={Link}
-                    onClick={handleLinkClick}
+                    onClick={() => handleItemClick("Orders")}
                     to="/admin/order-list"
                   >
                     Orders
                   </NavDropdown.Item>
                   <NavDropdown.Item
                     as={Link}
-                    onClick={handleLinkClick}
+                    onClick={() => handleItemClick("Users")}
                     to="/admin/user-list"
                   >
                     Users

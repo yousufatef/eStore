@@ -27,7 +27,7 @@ const HomePage = () => {
       <h1>Latest Products</h1>
       <Row>
         {isLoading ? (
-          <ProductSkeleton products={6} />
+          <ProductSkeleton products={8} />
         ) : (
           data?.products &&
           data?.products.map((product) => (

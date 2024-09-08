@@ -1,14 +1,6 @@
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import {
-  Row,
-  Col,
-  ListGroup,
-  Image,
-  Card,
-  Button,
-  ListGroupItem,
-} from "react-bootstrap";
+import { Row, Col, ListGroup, Image, Card, Button } from "react-bootstrap";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -16,13 +8,12 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import {
   useDeliverOrderMutation,
-  // useDeliverOrderMutation,s
   useGetOrderDetailsQuery,
-  useGetPayPalClientIdQuery,
+  useGetPaypalClientIdQuery,
   usePayOrderMutation,
 } from "../redux/api/ordersApiSlice";
 
-const OrderScreen = () => {
+const OrderDetailsPage = () => {
   const { id: orderId } = useParams();
 
   const {
@@ -45,7 +36,7 @@ const OrderScreen = () => {
     data: paypal,
     isLoading: loadingPayPal,
     error: errorPayPal,
-  } = useGetPayPalClientIdQuery();
+  } = useGetPaypalClientIdQuery();
 
   useEffect(() => {
     if (!errorPayPal && !loadingPayPal && paypal.clientId) {
@@ -74,23 +65,13 @@ const OrderScreen = () => {
         refetch();
         toast.success("Order is paid");
       } catch (err) {
-        console.error("Error during payment:", err);
         toast.error(err?.data?.message || err.error);
       }
     });
   }
 
   function onError(err) {
-    console.error("PayPal Error:", err);
     toast.error(err.message);
-  }
-
-  // TESTING ONLY! REMOVE BEFORE PRODUCTION
-  async function onApproveTest() {
-    await payOrder({ orderId, details: { payer: {} } });
-    refetch();
-
-    toast.success("Order is paid");
   }
 
   function createOrder(data, actions) {
@@ -132,7 +113,7 @@ const OrderScreen = () => {
                 <a href={`mailto:${order.user.email}`}>{order.user.email}</a>
               </p>
               <p>
-                <strong>Address: </strong>
+                <strong>Address:</strong>
                 {order.shippingAddress.address}, {order.shippingAddress.city}{" "}
                 {order.shippingAddress.postalCode},{" "}
                 {order.shippingAddress.country}
@@ -159,14 +140,14 @@ const OrderScreen = () => {
               )}
             </ListGroup.Item>
 
-            <ListGroupItem>
+            <ListGroup.Item>
               <h2>Order Items</h2>
               {order.orderItems.length === 0 ? (
                 <Message>Order is empty</Message>
               ) : (
                 <ListGroup variant="flush">
                   {order.orderItems.map((item, index) => (
-                    <ListGroupItem key={index}>
+                    <ListGroup.Item key={index}>
                       <Row>
                         <Col md={1}>
                           <Image
@@ -185,45 +166,45 @@ const OrderScreen = () => {
                           {item.qty} x ${item.price} = ${item.qty * item.price}
                         </Col>
                       </Row>
-                    </ListGroupItem>
+                    </ListGroup.Item>
                   ))}
                 </ListGroup>
               )}
-            </ListGroupItem>
+            </ListGroup.Item>
           </ListGroup>
         </Col>
         <Col md={4}>
           <Card>
             <ListGroup variant="flush">
-              <ListGroupItem>
+              <ListGroup.Item>
                 <h2>Order Summary</h2>
-              </ListGroupItem>
-              <ListGroupItem>
+              </ListGroup.Item>
+              <ListGroup.Item>
                 <Row>
                   <Col>Items</Col>
                   <Col>${order.itemsPrice}</Col>
                 </Row>
-              </ListGroupItem>
-              <ListGroupItem>
+              </ListGroup.Item>
+              <ListGroup.Item>
                 <Row>
                   <Col>Shipping</Col>
                   <Col>${order.shippingPrice}</Col>
                 </Row>
-              </ListGroupItem>
-              <ListGroupItem>
+              </ListGroup.Item>
+              <ListGroup.Item>
                 <Row>
                   <Col>Tax</Col>
                   <Col>${order.taxPrice}</Col>
                 </Row>
-              </ListGroupItem>
-              <ListGroupItem>
+              </ListGroup.Item>
+              <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
                   <Col>${order.totalPrice}</Col>
                 </Row>
-              </ListGroupItem>
+              </ListGroup.Item>
               {!order.isPaid && (
-                <ListGroupItem>
+                <ListGroup.Item>
                   {loadingPay && <Loader />}
 
                   {isPending ? (
@@ -231,12 +212,12 @@ const OrderScreen = () => {
                   ) : (
                     <div>
                       {/* THIS BUTTON IS FOR TESTING! REMOVE BEFORE PRODUCTION! */}
-                      <Button
-                        style={{ marginBottom: "10px" }}
+                      {/* <Button
+                        style={{ marginBottom: '10px' }}
                         onClick={onApproveTest}
                       >
                         Test Pay Order
-                      </Button>
+                      </Button> */}
 
                       <div>
                         <PayPalButtons
@@ -247,7 +228,7 @@ const OrderScreen = () => {
                       </div>
                     </div>
                   )}
-                </ListGroupItem>
+                </ListGroup.Item>
               )}
 
               {loadingDeliver && <Loader />}
@@ -256,7 +237,7 @@ const OrderScreen = () => {
                 userInfo.isAdmin &&
                 order.isPaid &&
                 !order.isDelivered && (
-                  <ListGroupItem>
+                  <ListGroup.Item>
                     <Button
                       type="button"
                       className="btn btn-block"
@@ -264,7 +245,7 @@ const OrderScreen = () => {
                     >
                       Mark As Delivered
                     </Button>
-                  </ListGroupItem>
+                  </ListGroup.Item>
                 )}
             </ListGroup>
           </Card>
@@ -274,4 +255,4 @@ const OrderScreen = () => {
   );
 };
 
-export default OrderScreen;
+export default OrderDetailsPage;

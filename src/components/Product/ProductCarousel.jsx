@@ -11,10 +11,11 @@ const ProductCarousel = () => {
     isError,
     error,
   } = useGetTopProductsQuery();
+
   return (
     <div>
       {isLoading ? (
-        ProductCarouselSkeleton
+        <ProductCarouselSkeleton />
       ) : isError ? (
         <Alert variant="danger">{error?.data?.error}</Alert>
       ) : (
